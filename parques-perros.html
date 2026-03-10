@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PBaru</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:  #2d5a27;
+      --lime:   #a8c e56;
+      --lime:   #b8d96e;
+      --sand:   #f5efe6;
+      --bark:   #6b4c2a;
+      --bark-lt:#c4956a;
+      --cream:  #fdfaf5;
+      --dark:   #1a1a14;
+      --accent: #e85d1e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(253,250,245,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(107,76,42,.12);
+    }
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem; font-weight: 900;
+      color: var(--green);
+      letter-spacing: -.02em;
+    }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2.4rem; }
+    nav ul a {
+      text-decoration: none; color: var(--dark);
+      font-size: .9rem; font-weight: 500;
+      transition: color .25s;
+    }
+    nav ul a:hover { color: var(--green); }
+    .nav-cta {
+      background: var(--green); color: #fff !important;
+      padding: .55rem 1.4rem; border-radius: 100px;
+      transition: background .25s, transform .2s !important;
+    }
+    .nav-cta:hover { background: var(--bark) !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 80% 50%, #d4edaa55, transparent),
+        radial-gradient(ellipse 40% 50% at 10% 80%, #c4956a22, transparent);
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--lime); color: var(--green);
+      font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: .4rem 1rem; border-radius: 100px; margin-bottom: 2rem;
+    }
+    .badge::before { content: '🐾'; font-size: .9rem; }
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 900; line-height: 1.0;
+      color: var(--green); letter-spacing: -.03em;
+      margin-bottom: 1.6rem;
+    }
+    h1 em { color: var(--accent); font-style: italic; font-weight: 300; }
+    .hero-sub {
+      font-size: 1.1rem; color: #555; line-height: 1.7;
+      max-width: 480px; margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--green); color: #fff;
+      padding: .9rem 2rem; border-radius: 100px;
+      text-decoration: none; font-weight: 500;
+      transition: background .25s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--bark); transform: translateY(-2px); }
+    .btn-outline {
+      border: 2px solid var(--green); color: var(--green);
+      padding: .9rem 2rem; border-radius: 100px;
+      text-decoration: none; font-weight: 500;
+      transition: all .25s;
+    }
+    .btn-outline:hover { background: var(--green); color: #fff; }
+
+    /* hero illustration */
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .park-card {
+      width: 360px; height: 400px;
+      background: var(--green);
+      border-radius: 2rem;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 7rem;
+      box-shadow: 0 30px 80px rgba(45,90,39,.3);
+      position: relative; overflow: hidden;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-14px) rotate(-1deg); }
+    }
+    .park-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 30%, #4a8a3e55, transparent 70%);
+    }
+    .park-card p {
+      font-family: 'Fraunces', serif;
+      color: var(--lime); font-size: 1.1rem;
+      font-weight: 700; letter-spacing: .04em;
+      margin-top: .5rem;
+    }
+    .floating-tag {
+      position: absolute;
+      background: #fff; border-radius: 1rem;
+      padding: .7rem 1.2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      font-size: .82rem; font-weight: 600;
+      display: flex; align-items: center; gap: .5rem;
+      animation: floatTag 3s ease-in-out infinite;
+    }
+    .ft1 { top: 10%; right: -10%; animation-delay: .5s; }
+    .ft2 { bottom: 20%; left: -12%; animation-delay: 1.2s; }
+    .ft3 { bottom: 5%; right: 5%; animation-delay: .8s; }
+    @keyframes floatTag {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex; gap: 0;
+      background: var(--green); color: #fff;
+      overflow: hidden;
+    }
+    .stat {
+      flex: 1; text-align: center;
+      padding: 2.5rem 1rem;
+      border-right: 1px solid rgba(255,255,255,.12);
+      transition: background .3s;
+    }
+    .stat:last-child { border-right: none; }
+    .stat:hover { background: var(--bark); }
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 3rem; font-weight: 900;
+      color: var(--lime); line-height: 1;
+    }
+    .stat-label { font-size: .85rem; opacity: .8; margin-top: .4rem; }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 6rem 4rem; }
+    .section-tag {
+      font-size: .78rem; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--bark-lt);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--green); letter-spacing: -.02em;
+      margin-bottom: 1.2rem;
+    }
+    .section-sub { font-size: 1rem; color: #666; max-width: 520px; line-height: 1.7; }
+
+    /* ── SERVICES ── */
+    #servicios { background: var(--sand); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+    .service-card {
+      background: #fff; border-radius: 1.5rem;
+      padding: 2.2rem 2rem;
+      border: 1px solid rgba(107,76,42,.1);
+      transition: transform .3s, box-shadow .3s;
+      cursor: default;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(45,90,39,.12);
+    }
+    .service-icon {
+      font-size: 2.4rem; margin-bottom: 1.2rem;
+      display: block;
+    }
+    .service-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--green); margin-bottom: .7rem;
+    }
+    .service-card p { font-size: .9rem; color: #666; line-height: 1.65; }
+    .service-tag {
+      display: inline-block; margin-top: 1rem;
+      background: var(--lime); color: var(--green);
+      font-size: .72rem; font-weight: 700; padding: .3rem .8rem;
+      border-radius: 100px; letter-spacing: .04em;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #como-funciona { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .steps { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .step { display: flex; gap: 1.2rem; align-items: flex-start; }
+    .step-num {
+      width: 2.5rem; height: 2.5rem; flex-shrink: 0;
+      background: var(--green); color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-family: 'Fraunces', serif; font-weight: 900; font-size: 1rem;
+    }
+    .step h4 { font-weight: 600; margin-bottom: .3rem; color: var(--dark); }
+    .step p { font-size: .88rem; color: #666; line-height: 1.6; }
+
+    .visual-block {
+      background: var(--green);
+      border-radius: 2rem;
+      height: 420px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1rem;
+      font-size: 5rem;
+      box-shadow: 0 20px 60px rgba(45,90,39,.25);
+      position: relative; overflow: hidden;
+    }
+    .visual-block::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 20px,
+        rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 21px
+      );
+    }
+
+    /* ── TESTIMONIALS ── */
+    #testimonios { background: var(--dark); color: #fff; }
+    #testimonios .section-title { color: var(--lime); }
+    #testimonios .section-sub { color: #aaa; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+    .testi-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 1.5rem; padding: 2rem;
+      transition: background .3s;
+    }
+    .testi-card:hover { background: rgba(255,255,255,.09); }
+    .stars { color: var(--lime); font-size: 1.1rem; margin-bottom: 1rem; }
+    .testi-card p { font-size: .92rem; line-height: 1.7; color: #ccc; margin-bottom: 1.5rem; }
+    .testi-author { display: flex; align-items: center; gap: .8rem; }
+    .avatar {
+      width: 2.6rem; height: 2.6rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      background: var(--green);
+    }
+    .testi-author strong { display: block; font-size: .9rem; color: #fff; }
+    .testi-author span { font-size: .78rem; color: #888; }
+
+    /* ── CONTACT ── */
+    #contacto { background: var(--sand); }
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start;
+      margin-top: 3rem;
+    }
+    .contact-info h3 {
+      font-family: 'Fraunces', serif; font-size: 1.4rem;
+      color: var(--green); margin-bottom: 1rem;
+    }
+    .contact-info p { font-size: .92rem; color: #666; line-height: 1.7; margin-bottom: 1.5rem; }
+    .contact-details { display: flex; flex-direction: column; gap: .8rem; }
+    .c-detail {
+      display: flex; align-items: center; gap: .7rem;
+      font-size: .9rem; color: var(--dark);
+    }
+    .c-icon { font-size: 1.2rem; }
+
+    /* FORM */
+    form {
+      background: #fff; border-radius: 2rem;
+      padding: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem;
+      box-shadow: 0 10px 40px rgba(45,90,39,.08);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .field { display: flex; flex-direction: column; gap: .45rem; }
+    label { font-size: .82rem; font-weight: 600; color: var(--dark); }
+    input, textarea, select {
+      padding: .8rem 1rem;
+      border: 2px solid #e5e0d8;
+      border-radius: .8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem; color: var(--dark);
+      background: #fff;
+      transition: border-color .25s, box-shadow .25s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(45,90,39,.1);
+    }
+    textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      width: 100%;
+      background: var(--green); color: #fff;
+      border: none; padding: 1rem;
+      border-radius: .8rem; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: background .25s, transform .2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .form-submit:hover { background: var(--bark); transform: translateY(-2px); }
+    .form-submit:active { transform: translateY(0); }
+
+    /* success toast */
+    .toast {
+      display: none;
+      align-items: center; gap: .8rem;
+      background: var(--green); color: #fff;
+      padding: 1rem 1.5rem; border-radius: 1rem;
+      font-weight: 500; font-size: .95rem;
+    }
+    .toast.show { display: flex; animation: slideUp .4s ease; }
+    @keyframes slideUp {
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: #aaa;
+      text-align: center; padding: 3rem 4rem;
+      font-size: .85rem;
+    }
+    footer .logo { color: var(--lime); margin-bottom: .8rem; display: block; }
+    footer a { color: var(--bark-lt); text-decoration: none; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 2rem; }
+      nav ul { display: none; }
+      #hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; text-align: center; }
+      .hero-btns { justify-content: center; }
+      .hero-visual { margin-top: 3rem; }
+      .park-card { width: 280px; height: 300px; font-size: 5rem; }
+      .ft1, .ft2, .ft3 { display: none; }
+      .stats { flex-wrap: wrap; }
+      .stat { min-width: 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); }
+      section { padding: 4rem 2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      #como-funciona { grid-template-columns: 1fr; gap: 2rem; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Paw<span>Park</span></div>
+  <ul>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#testimonios">Opiniones</a></li>
+    <li><a href="#contacto" class="nav-cta">Reservar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="badge">Zaca</div>
+    <h1>El parque que tu perro <em>merece</em></h1>
+    <p class="hero-sub">Espacios seguros, limpios y llenos de naturaleza donde tu mascota puede correr libre, socializar y ser completamente feliz.</p>
+    <div class="hero-btns">
+      <a href="#contacto" class="btn-primary">Reservar ahora</a>
+      <a href="#servicios" class="btn-outline">Conocer más</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="park-card">
+      🐕
+      <p>PAWPARK</p>
+      <div class="floating-tag ft1">🌿 Zona natural</div>
+      <div class="floating-tag ft2">⭐ 4.9 / 5.0</div>
+      <div class="floating-tag ft3">🦮 +500 perros</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat reveal">
+    <div class="stat-num" data-target="12">0</div>
+    <div class="stat-label">Parques en la ciudad</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num" data-target="500">0</div>
+    <div class="stat-label">Perros felices al mes</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num" data-target="98">0</div>
+    <div class="stat-label">% de satisfacción</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num" data-target="7">0</div>
+    <div class="stat-label">Años de experiencia</div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-tag">Lo que ofrecemos</div>
+  <h2 class="section-title">Todo lo que tu perro<br>necesita en un lugar</h2>
+  <p class="section-sub">Diseñamos cada espacio pensando en el bienestar, la seguridad y la diversión de tu mascota.</p>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-icon">🌳</span>
+      <h3>Parque libre al aire libre</h3>
+      <p>Zonas verdes completamente cercadas donde tu perro puede correr sin correa con total seguridad. Terreno natural con sombra y agua fresca.</p>
+      <span class="service-tag">Incluido</span>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🏃</span>
+      <h3>Circuito de agilidad</h3>
+      <p>Obstáculos, túneles y rampas diseñados por expertos caninos para estimular física y mentalmente a tu mascota de forma divertida.</p>
+      <span class="service-tag">Premium</span>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">💧</span>
+      <h3>Zona acuática</h3>
+      <p>Área de chapoteo controlada ideal para los meses de calor. Perfecta para perros que adoran el agua. Limpieza diaria garantizada.</p>
+      <span class="service-tag">Temporada</span>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🤝</span>
+      <h3>Socialización guiada</h3>
+      <p>Sesiones controladas con un adiestrador para que perros tímidos o con poca experiencia social aprendan a interactuar positivamente.</p>
+      <span class="service-tag">Con cita</span>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🛁</span>
+      <h3>Peluquería y baño</h3>
+      <p>Servicio de grooming profesional disponible tras la sesión de parque. Tu perro sale limpio, peinado y oliendo increíble.</p>
+      <span class="service-tag">Extra</span>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">☕</span>
+      <h3>Cafetería para humanos</h3>
+      <p>Mientras tu perro disfruta, tú relajas en nuestra terraza con café, snacks y wifi. Porque las familias merecen disfrutar juntas.</p>
+      <span class="service-tag">Incluido</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona">
+  <div class="visual-block reveal">
+    🐾🌿🐕‍🦺
+  </div>
+  <div>
+    <div class="section-tag">Proceso sencillo</div>
+    <h2 class="section-title">Tres pasos para una tarde perfecta</h2>
+    <p class="section-sub">Reservar es fácil. Tu perro estará corriendo en minutos.</p>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div>
+          <h4>Elige tu parque y horario</h4>
+          <p>Selecciona el parque más cercano a ti y el turno que mejor encaje con tu agenda. Disponibilidad en tiempo real.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <div>
+          <h4>Confirma los datos de tu perro</h4>
+          <p>Raza, tamaño y vacunas al día. Es el único requisito: garantizamos la seguridad de todos los peludos.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <div>
+          <h4>Llega y disfruta</h4>
+          <p>Muestra tu confirmación en la entrada y listo. Sin colas, sin papeleo. Solo diversión.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios">
+  <div class="section-tag">Opiniones reales</div>
+  <h2 class="section-title">Perros felices,<br>familias contentas</h2>
+  <p class="section-sub">Más de 500 familias ya confían en PawPark cada mes. Esto es lo que nos cuentan.</p>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Mi border collie necesitaba espacio para gastar energía y aquí lo encontró. Las instalaciones están impecables y el personal es súper amable."</p>
+      <div class="testi-author">
+        <div class="avatar">👩</div>
+        <div>
+          <strong>Laura Martínez</strong>
+          <span>Con Max, border collie</span>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Llevamos a nuestra perra rescatada que era muy tímida. Gracias a las sesiones de socialización ya juega con otros perros sin problema. ¡Un cambio increíble!"</p>
+      <div class="testi-author">
+        <div class="avatar">👨</div>
+        <div>
+          <strong>Carlos Ruiz</strong>
+          <span>Con Luna, mestiza</span>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"La cafetería es un detalle genial. Por fin puedo tomar un café tranquila mientras mi golden disfruta. Definitivamente lo recomiendo a todo el mundo."</p>
+      <div class="testi-author">
+        <div class="avatar">👩‍🦱</div>
+        <div>
+          <strong>Ana Gómez</strong>
+          <span>Con Coco, golden retriever</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="section-tag">¿Listo para empezar?</div>
+  <h2 class="section-title">Reserva o contáctanos</h2>
+  <p class="section-sub">¿Tienes dudas o quieres una visita personalizada? Escríbenos y te respondemos en menos de 24 horas.</p>
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <h3>Estamos aquí para ayudarte</h3>
+      <p>Nuestro equipo está formado por amantes de los perros. No eres un número: eres parte de nuestra comunidad peluda.</p>
+      <div class="contact-details">
+        <div class="c-detail"><span class="c-icon">📍</span> Calle Naturaleza 24, Madrid</div>
+        <div class="c-detail"><span class="c-icon">📞</span> +34 912 345 678</div>
+        <div class="c-detail"><span class="c-icon">✉️</span> hola@pawpark.es</div>
+        <div class="c-detail"><span class="c-icon">🕐</span> Lun–Dom: 8:00 – 20:00</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" placeholder="Tu nombre" required/>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="tucorreo@email.com" required/>
+          </div>
+        </div>
+        <div class="field">
+          <label for="telefono">Teléfono (opcional)</label>
+          <input type="tel" id="telefono" placeholder="+34 600 000 000"/>
+        </div>
+        <div class="field">
+          <label for="servicio">¿Qué te interesa?</label>
+          <select id="servicio">
+            <option value="">Selecciona un servicio…</option>
+            <option>Parque libre al aire libre</option>
+            <option>Circuito de agilidad</option>
+            <option>Zona acuática</option>
+            <option>Socialización guiada</option>
+            <option>Peluquería y baño</option>
+            <option>Información general</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" placeholder="Cuéntanos sobre tu perro o tu consulta…"></textarea>
+        </div>
+        <div class="toast" id="toast">✅ ¡Mensaje enviado! Te contactaremos pronto.</div>
+        <button type="submit" class="form-submit">Enviar mensaje 🐾</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">PawPark</div>
+  <p>© 2025 PawPark · Todos los derechos reservados · <a href="#">Política de privacidad</a></p>
+</footer>
+
+<script>
+  // ── Scroll reveal ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── Count-up animation ──
+  const statNums = document.querySelectorAll('.stat-num[data-target]');
+  const countObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = +el.dataset.target;
+      const suffix = target === 98 ? '%' : target >= 500 ? '+' : '';
+      let current = 0;
+      const step = Math.ceil(target / 60);
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 20);
+      countObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(n => countObs.observe(n));
+
+  // ── Form submission ──
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value.trim();
+    const email  = document.getElementById('email').value.trim();
+    if (!nombre || !email) {
+      alert('Por favor completa tu nombre y email.');
+      return;
+    }
+    const btn   = this.querySelector('.form-submit');
+    const toast = document.getElementById('toast');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    setTimeout(() => {
+      toast.classList.add('show');
+      btn.textContent = '¡Enviado! 🎉';
+      this.reset();
+      setTimeout(() => {
+        toast.classList.remove('show');
+        btn.disabled = false;
+        btn.textContent = 'Enviar mensaje 🐾';
+      }, 4000);
+    }, 900);
+  });
+
+  // ── Smooth nav highlight ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav ul a');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 120;
+    sections.forEach(s => {
+      if (y >= s.offsetTop && y < s.offsetTop + s.offsetHeight) {
+        navLinks.forEach(a => {
+          a.style.color = '';
+          if (a.getAttribute('href') === '#' + s.id) a.style.color = '#2d5a27';
+        });
+      }
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
